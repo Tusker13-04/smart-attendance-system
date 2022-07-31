@@ -1,7 +1,7 @@
 /*
- * Initial Author: ryand1011 (https://github.com/ryand1011)
+ * 
  *
- * Reads data written by a program such as "rfid_write_personal_data.ino"
+ * 
  *
  * See: https://github.com/miguelbalboa/rfid/tree/master/examples/rfid_write_personal_data
  *
@@ -34,7 +34,7 @@ void setup() {
   Serial.begin(9600);                                           // Initialize serial communications with the PC
   SPI.begin();                                                  // Init SPI bus
   mfrc522.PCD_Init();                                              // Init MFRC522 card
-  Serial.println(F("Read personal data on a MIFARE PICC:"));    //shows in serial that it is ready to read
+  //Serial.println(F("Read personal data on a MIFARE PICC:"));    //shows in serial that it is ready to read
 }
 
 //*****************************************************************************************//
@@ -61,7 +61,7 @@ void loop() {
     return;
   }
 
-  Serial.println(F("**Card Detected:**"));
+  //Serial.println(F("**Card Detected:**"));
 
   //-------------------------------------------
 
@@ -71,7 +71,7 @@ void loop() {
 
   //-------------------------------------------
 
-  Serial.print(F("Name: "));
+  Serial.print(F(""));
 
   byte buffer1[18];
 
@@ -130,7 +130,7 @@ void loop() {
 
   //----------------------------------------
 
-  Serial.println(F("\n**End Reading**\n"));
+  //Serial.println(F("\n**End Reading**\n"));
 
   delay(1000); //change value if you want to read cards faster
 
