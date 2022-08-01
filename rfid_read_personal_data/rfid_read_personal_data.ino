@@ -25,7 +25,7 @@
 #include <MFRC522.h>
 //List of people
 //IMPORTANT : Hardcoded to 10 must be changed to be dynamic. 
-String[10] people;
+String people[10];
 
 #define RST_PIN         9           // Configurable, see typical pin layout above
 #define SS_PIN          10          // Configurable, see typical pin layout above
@@ -112,7 +112,7 @@ void loop() {
   //Creating a char array so we can convert the byte array to a char array and then a string
   //Then adding it to the String array 'people'.
   char chars[18];
-  memcpy(chars,bufferN,18)
+  memcpy(chars,bufferN,18);
   String read = String(chars);
   //IMPORTANT : Hardcoded must be changed later to be dynamic.
   people[0]=read;
