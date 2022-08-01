@@ -23,12 +23,15 @@
 
 #include <SPI.h>
 #include <MFRC522.h>
+//List of people
+//IMPORTANT : Hardcoded to 10 must be changed to be dynamic. 
+String[10] people;
 
 #define RST_PIN         9           // Configurable, see typical pin layout above
 #define SS_PIN          10          // Configurable, see typical pin layout above
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance
-
+String name = "";
 //*****************************************************************************************//
 void setup() {
   Serial.begin(9600);                                           // Initialize serial communications with the PC
@@ -65,7 +68,7 @@ void loop() {
 
   //-------------------------------------------
 
-  mfrc522.PICC_DumpDetailsToSerial(&(mfrc522.uid)); //dump some details about the card
+  //mfrc522.PICC_DumpDetailsToSerial(&(mfrc522.uid)); //dump some details about the card
 
   //mfrc522.PICC_DumpToSerial(&(mfrc522.uid));      //uncomment this to see all blocks in hex
 
@@ -92,16 +95,28 @@ void loop() {
     Serial.println(mfrc522.GetStatusCodeName(status));
     return;
   }
-
+  //Creates a new buffer and a varibale to iterate
+  byte bufferN[18];
+  int count = 0;
   //PRINT FIRST NAME
   for (uint8_t i = 0; i < 16; i++)
   {
     if (buffer1[i] != 32)
     {
-      Serial.write(buffer1[i]);
+      //Serial.write(buffer1[i]);
+      //Takes the wanted bits and sets them in the new buffer
+      bufferN[count] = buffer1[i];
+      count++;
     }
   }
-  Serial.print(" ");
+  //Creating a char array so we can convert the byte array to a char array and then a string
+  //Then adding it to the String array 'people'.
+  char chars[18];
+  memcpy(chars,bufferN,18)
+  String read = String(chars);
+  //IMPORTANT : Hardcoded must be changed later to be dynamic.
+  people[0]=read;
+  Serial.print(people[0]);
 
   //---------------------------------------- GET LAST NAME
 
