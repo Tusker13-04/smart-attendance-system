@@ -68,7 +68,7 @@ void loop() {
 
   //-------------------------------------------
 
-  //mfrc522.PICC_DumpDetailsToSerial(&(mfrc522.uid)); //dump some details about the card
+  mfrc522.PICC_DumpDetailsToSerial(&(mfrc522.uid)); //dump some details about the card
 
   //mfrc522.PICC_DumpToSerial(&(mfrc522.uid));      //uncomment this to see all blocks in hex
 
@@ -95,11 +95,7 @@ void loop() {
     Serial.println(mfrc522.GetStatusCodeName(status));
     return;
   }
-  byte bufferu[10];
-  for (uint8_t i = 0; i < 10; i++)
-  {
-    Serial.write(bufferu[i]);
-  }
+
   //Creates a new buffer and a varibale to iterate
   //byte bufferN[18];
   //int count = 0;
