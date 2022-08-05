@@ -6,60 +6,85 @@ import time
 
 timeThreshold = 600
 arduino = serial.Serial(port="COM3", baudrate=9600)
-timeouts = {}
+filePath = r"data.json"
 
 
-def update():
-    while 1:
-        for i in timeouts.keys():
-            if timeouts[i]["tick"] >= timeThreshold:
-                timeouts[i]["updateAble"] = True
-                timeouts[i]["tick"] = 0
-            else:
-                timeouts[i]["tick"] += 1
-        time.sleep(1)
+def checkTime(t1, t2):
+    global timeThreshold
+    t1 = datetime(int(t1[0]), int(t1[1]), int(t1[2]), int(t1[3]), int(t1[4]), int(t1[5]))
+    print(t1.strftime("%Y:%m:%d:%H:%M:%S"))
+    print(t2.strftime("%Y:%m:%d:%H:%M:%S"))
+    diff = (t2 - t1).total_seconds()
+    print(f"difference is {diff}")
+    if diff <= timeThreshold:
+        return True
+    else:
+        return False
 
 
-def updateEntry(fil, usn, uid):
-    data = fil.read()
+def updateEntry(usn, uid):
+    global filePath
+    with open(filePath, "r") as fil:
+        data = fil.read()
+        print(data)
     data = json.loads(data)
     now = datetime.now()
-    currUser = data[usn]
-    current_time = now.strftime("%d:%m%y:%H:%M:%S")
-    currUser["uid"] = uid
-    if bool(currUser["inSchool"]):
-        currUser["entries"][len(currUser["entries"]) - 1]["end"] = current_time
-        currUser["inSchool"] = "0"
+    if usn in data.keys():
+        currUser = data[usn]
     else:
-        currUser["entries"].append({"start": current_time})
-        currUser["inSchool"] = "1"
-    data = json.dumps(data)
-    fil.write(data)
+        print("User Not Registered")
+        return
+    current_time = now.strftime("%Y:%m:%d:%H:%M:%S")
+    currUser["uid"] = uid
+    if currUser["inSchool"]:
+        lastTimeEntry = currUser["entries"][len(currUser["entries"]) - 1]["start"].split(":")
+        print(lastTimeEntry)
+        if not checkTime(lastTimeEntry, now):
+            currUser["entries"][len(currUser["entries"]) - 1]["end"] = current_time
+            currUser["inSchool"] = False
+            print(data)
+        else:
+            print("cooldown neeed")
+            return
+    else:
+        lastTimeEntry = currUser["entries"][len(currUser["entries"]) - 1]["end"].split(":")
+        print(lastTimeEntry)
+        if not checkTime(lastTimeEntry, now):
+            print("cooldown not needed")
+            currUser["entries"].append({"start": current_time})
+            currUser["inSchool"] = True
+            print(data)
+        else:
+            print("cooldown needed")
+            return
 
-ticker = threading.Thread(target=update)
-ticker.start()
+    with open(filePath, "w") as fil1:
+        data = json.dumps(data)
+        fil1.write(data)
+
+
 uid = ""
 nameUsn = []
-with open("data.json") as file:
-    while True:
-        line = str(arduino.readline())
-        
-        
-        if "uid" in line.lower():
-            uid = line.split(":")[1]
-        if "name" in line.lower():
-            nameUsn = line.split(":")[1].split(";")
-            if nameUsn[1] in timeouts.keys():
-                if timeouts[nameUsn[1]]["updateAble"]:
-                    updateEntry(file, nameUsn[1], uid)
-                else:
-                    print(f"cooldown not yet finished for {nameUsn[0]}")
-            else:
-                print("no user with this usn....")
 
 
-            uid = ""
-            name = []
+while True:
+    line = str(arduino.readline())
+    if "uid" in line.lower():
+        uid = line.split(":")[1]
+    if "name" in line.lower():
+        nameUsn = line.split(":")[1].split(";")
+        updateEntry(nameUsn[1], uid)
+        uid = ""
+        nameUsn = []
+
+
+
+
+
+
+
+
+
 
 
 
