@@ -38,12 +38,13 @@ def updateEntry(fil, usn, uid):
 
 ticker = threading.Thread(target=update)
 ticker.start()
-
+uid = ""
+nameUsn = []
 with open("data.json") as file:
     while True:
         line = str(arduino.readline())
-        uid = ""
-        nameUsn = []
+        
+        
         if "uid" in line.lower():
             uid = line.split(":")[1]
         if "name" in line.lower():
@@ -57,6 +58,8 @@ with open("data.json") as file:
                 print("no user with this usn....")
 
 
+            uid = ""
+            name = []
 
 
 
