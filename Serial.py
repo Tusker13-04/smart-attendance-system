@@ -1,8 +1,8 @@
 import serial
-import threading
+
 import json
 from datetime import datetime
-import time
+
 
 timeThreshold = 600
 arduino = serial.Serial(port="COM3", baudrate=9600)
@@ -32,6 +32,7 @@ def updateEntry(usn, uid):
     if usn in data.keys():
         currUser = data[usn]
     else:
+        print(usn, "is not in the database")
         print("User Not Registered")
         return
     current_time = now.strftime("%Y:%m:%d:%H:%M:%S")
@@ -44,18 +45,18 @@ def updateEntry(usn, uid):
             currUser["inSchool"] = False
             print(data)
         else:
-            print("cooldown neeed")
+            print("cool down need")
             return
     else:
         lastTimeEntry = currUser["entries"][len(currUser["entries"]) - 1]["end"].split(":")
         print(lastTimeEntry)
         if not checkTime(lastTimeEntry, now):
-            print("cooldown not needed")
+            print("cool down not needed")
             currUser["entries"].append({"start": current_time})
             currUser["inSchool"] = True
             print(data)
         else:
-            print("cooldown needed")
+            print("cool down needed")
             return
 
     with open(filePath, "w") as fil1:
@@ -72,21 +73,13 @@ while True:
     if "uid" in line.lower():
         uid = line.split(":")[1]
     if "name" in line.lower():
+
         nameUsn = line.split(":")[1].split(";")
-        updateEntry(nameUsn[1], uid)
+        usn=nameUsn[1]
+        usn = usn[0:len(usn)-5]
+        print(usn,"<--usn")
+        print(nameUsn,"<---nameUsn")
+        updateEntry(usn, uid)
         uid = ""
         nameUsn = []
-
-
-
-
-
-
-
-
-
-
-
-
-
 
