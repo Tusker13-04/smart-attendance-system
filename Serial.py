@@ -26,7 +26,7 @@ def updateEntry(usn, uid):
     global filePath
     with open(filePath, "r") as fil:
         data = fil.read()
-        print(data)
+       
     data = json.loads(data)
     now = datetime.now()
     if usn in data.keys():
@@ -43,18 +43,23 @@ def updateEntry(usn, uid):
         if not checkTime(lastTimeEntry, now):
             currUser["entries"][len(currUser["entries"]) - 1]["end"] = current_time
             currUser["inSchool"] = False
-            print(data)
+            
         else:
-            print("cool down need")
+            print("cool down needed")
             return
     else:
-        lastTimeEntry = currUser["entries"][len(currUser["entries"]) - 1]["end"].split(":")
-        print(lastTimeEntry)
+        try:
+            lastTimeEntry = currUser["entries"][len(currUser["entries"]) - 1]["end"].split(":")
+        except Exception as e:
+            currUser["entries"].append({"start": current_time})
+            currUser["inSchool"] = True
+            return
+        
         if not checkTime(lastTimeEntry, now):
             print("cool down not needed")
             currUser["entries"].append({"start": current_time})
             currUser["inSchool"] = True
-            print(data)
+            
         else:
             print("cool down needed")
             return
