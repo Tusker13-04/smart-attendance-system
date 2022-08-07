@@ -3,7 +3,6 @@ import serial
 import json
 from datetime import datetime
 
-
 timeThreshold = 600
 arduino = serial.Serial(port="COM3", baudrate=9600)
 filePath = r"data.json"
@@ -26,7 +25,7 @@ def updateEntry(usn, uid):
     global filePath
     with open(filePath, "r") as fil:
         data = fil.read()
-       
+
     data = json.loads(data)
     now = datetime.now()
     if usn in data.keys():
@@ -43,7 +42,7 @@ def updateEntry(usn, uid):
         if not checkTime(lastTimeEntry, now):
             currUser["entries"][len(currUser["entries"]) - 1]["end"] = current_time
             currUser["inSchool"] = False
-            
+
         else:
             print("cool down needed")
             return
@@ -51,15 +50,19 @@ def updateEntry(usn, uid):
         try:
             lastTimeEntry = currUser["entries"][len(currUser["entries"]) - 1]["end"].split(":")
         except Exception as e:
+            print(e)
             currUser["entries"].append({"start": current_time})
             currUser["inSchool"] = True
+            with open(filePath, "w") as fil1:
+                data = json.dumps(data)
+                fil1.write(data)
             return
-        
+
         if not checkTime(lastTimeEntry, now):
             print("cool down not needed")
             currUser["entries"].append({"start": current_time})
             currUser["inSchool"] = True
-            
+
         else:
             print("cool down needed")
             return
@@ -72,19 +75,21 @@ def updateEntry(usn, uid):
 uid = ""
 nameUsn = []
 
-
 while True:
     line = str(arduino.readline())
     if "uid" in line.lower():
         uid = line.split(":")[1]
-    if "name" in line.lower():
+        chars = uid.split()
+        newLastElement = chars[3].strip("\\r\\n")
+        chars[3] = newLastElement
+        uid = ' '.join(chars)
 
+    if "name" in line.lower():
         nameUsn = line.split(":")[1].split(";")
-        usn=nameUsn[1]
-        usn = usn[0:len(usn)-5]
-        print(usn,"<--usn")
-        print(nameUsn,"<---nameUsn")
+        usn = nameUsn[1]
+        usn = usn[0:len(usn) - 5]
+        print(usn, "<--usn")
+        print(nameUsn, "<---nameUsn")
         updateEntry(usn, uid)
         uid = ""
         nameUsn = []
-
