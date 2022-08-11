@@ -33,11 +33,12 @@ def do_read():
 					if rdr.select_tag(raw_uid) == rdr.OK:
 
 						key = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
-
+						nameusn=[]
 						if rdr.auth(rdr.AUTHENT1A, 8, key, raw_uid) == rdr.OK:
 							print("Address 8 data: %s" % rdr.read(8))
 							for decimal in rdr.read(8):
-								print(str(bytes.fromhex(hex(decimal[2:]))))
+								nameusn.append(str(chr(decimal)))
+							print(nameusn.join(''))
 							rdr.stop_crypto1()
 						else:
 							print("Authentication error")
