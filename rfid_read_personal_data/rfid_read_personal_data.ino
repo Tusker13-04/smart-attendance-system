@@ -1,7 +1,7 @@
 /*
- * Initial Author: ryand1011 (https://github.com/ryand1011)
+ * 
  *
- * Reads data written by a program such as "rfid_write_personal_data.ino"
+ * 
  *
  * See: https://github.com/miguelbalboa/rfid/tree/master/examples/rfid_write_personal_data
  *
@@ -23,18 +23,21 @@
 
 #include <SPI.h>
 #include <MFRC522.h>
+//List of people
+//IMPORTANT : Hardcoded to 10 must be changed to be dynamic. 
+//String people[10];
 
 #define RST_PIN         9           // Configurable, see typical pin layout above
 #define SS_PIN          10          // Configurable, see typical pin layout above
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance
-
+String name = "";
 //*****************************************************************************************//
 void setup() {
   Serial.begin(9600);                                           // Initialize serial communications with the PC
   SPI.begin();                                                  // Init SPI bus
   mfrc522.PCD_Init();                                              // Init MFRC522 card
-  Serial.println(F("Read personal data on a MIFARE PICC:"));    //shows in serial that it is ready to read
+  //Serial.println(F("Read personal data on a MIFARE PICC:"));    //shows in serial that it is ready to read
 }
 
 //*****************************************************************************************//
@@ -61,7 +64,7 @@ void loop() {
     return;
   }
 
-  Serial.println(F("**Card Detected:**"));
+  //Serial.println(F("**Card Detected:**"));
 
   //-------------------------------------------
 
@@ -71,7 +74,7 @@ void loop() {
 
   //-------------------------------------------
 
-  Serial.print(F("Name: "));
+  Serial.print(F(""));
 
   byte buffer1[18];
 
@@ -93,15 +96,28 @@ void loop() {
     return;
   }
 
+  //Creates a new buffer and a varibale to iterate
+  //byte bufferN[18];
+  //int count = 0;
   //PRINT FIRST NAME
   for (uint8_t i = 0; i < 16; i++)
   {
     if (buffer1[i] != 32)
     {
       Serial.write(buffer1[i]);
+      //Takes the wanted bits and sets them in the new buffer
+      //bufferN[count] = buffer1[i];
+      //count++;
     }
   }
-  Serial.print(" ");
+  //Creating a char array so we can convert the byte array to a char array and then a string
+  //Then adding it to the String array 'people'.
+  //char chars[18];
+  //memcpy(chars,bufferN,18);
+  //String read = String(chars);
+  //IMPORTANT : Hardcoded must be changed later to be dynamic.
+  //people[0]=read;
+  //Serial.print(people[0]);
 
   //---------------------------------------- GET LAST NAME
 
@@ -130,7 +146,7 @@ void loop() {
 
   //----------------------------------------
 
-  Serial.println(F("\n**End Reading**\n"));
+  //Serial.println(F("\n**End Reading**\n"));
 
   delay(1000); //change value if you want to read cards faster
 
