@@ -49,3 +49,5 @@ def do_write():
 
 	except KeyboardInterrupt:
 		print("Bye")
+
+do_write()
