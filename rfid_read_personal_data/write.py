@@ -1,13 +1,13 @@
-import mfrc522
+import main
 from os import uname
 
 
 def do_write():
 
 	if uname()[0] == 'WiPy':
-		rdr = mfrc522.MFRC522("GP14", "GP16", "GP15", "GP22", "GP17")
+		rdr = main.MFRC522("GP14", "GP16", "GP15", "GP22", "GP17")
 	elif uname()[0] == 'esp8266':
-		rdr = mfrc522.MFRC522(0, 2, 4, 5, 14)
+		rdr = main.MFRC522(0, 2, 4, 5, 14)
 	else:
 		raise RuntimeError("Unsupported platform")
 
