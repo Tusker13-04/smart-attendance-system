@@ -38,7 +38,7 @@ def do_read():
 							print("Address 8 data: %s" % rdr.read(8))
 							for decimal in rdr.read(8):
 								nameusn.append(str(chr(decimal)))
-							print("".join(nameusn))
+							print(("".join(nameusn)).replace('\n',''))
 							rdr.stop_crypto1()
 						else:
 							print("Authentication error")
