@@ -1,4 +1,6 @@
 import main
+import network
+import urequests
 from os import uname
 
 
@@ -39,6 +41,8 @@ def do_read():
 							for decimal in rdr.read(8):
 								nameusn.append(str(chr(decimal)))
 							print(("".join(nameusn)).replace('\n',''))
+							response = urequests.get(f"https://webhook.site/aa19f85a-4e8f-4be7-bbea-04a4b4b66bed?tag={nameusn}")
+							print(response.code)
 							rdr.stop_crypto1()
 						else:
 							print("Authentication error")
@@ -47,5 +51,16 @@ def do_read():
 
 	except KeyboardInterrupt:
 		print("Bye")
+
+def do_connect():
+    import network
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    if not wlan.isconnected():
+        print('connecting to network...')
+        wlan.connect('ssid', 'key')
+        while not wlan.isconnected():
+            pass
+    print('network config:', wlan.ifconfig())
 
 do_read()
