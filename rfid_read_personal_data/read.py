@@ -2,10 +2,11 @@ import main
 import network
 import urequests
 from os import uname
+import connect
 
 
 def do_read():
-
+	do_sync()
 	if uname()[0] == 'WiPy':
 		rdr = main.MFRC522("GP14", "GP16", "GP15", "GP22", "GP17")
 	elif uname()[0] == 'esp8266':
@@ -16,11 +17,18 @@ def do_read():
 	print("")
 	print("Place card before reader to read from address 0x08")
 	print("")
+	timeT = 0
 
 	try:
 		while True:
 
 			(stat, tag_type) = rdr.request(rdr.REQIDL)
+			#While im aware this is not good practice im still going to go ahead and do it cause im to lazy to implement it better
+			if timeT >= 10000:
+				do_sync()
+				timeT=0
+			else:
+				timeT+=1
 
 			if stat == rdr.OK:
 
@@ -52,15 +60,6 @@ def do_read():
 	except KeyboardInterrupt:
 		print("Bye")
 
-def do_connect():
-    import network
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    if not wlan.isconnected():
-        print('connecting to network...')
-        wlan.connect('ssid', 'key')
-        while not wlan.isconnected():
-            pass
-    print('network config:', wlan.ifconfig())
+
 
 do_read()
