@@ -50,7 +50,7 @@ def do_read():
 								nameusn.append(str(chr(decimal)))
 							print(("".join(nameusn)).replace('\n',''))
 							nameUSN=("".join(nameusn)).replace('\n','') 
-							response = urequests.get(f"https://webhook.site/aa19f85a-4e8f-4be7-bbea-04a4b4b66bed?tag={nameUSN}")
+							response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co?data={nameUSN}")
 							print(response)
 							rdr.stop_crypto1()
 						else:
