@@ -6,7 +6,7 @@ import connect
 
 
 def do_read():
-	do_sync()
+	connect.do_sync()
 	if uname()[0] == 'WiPy':
 		rdr = main.MFRC522("GP14", "GP16", "GP15", "GP22", "GP17")
 	elif uname()[0] == 'esp8266':
@@ -17,18 +17,18 @@ def do_read():
 	print("")
 	print("Place card before reader to read from address 0x08")
 	print("")
-	timeT = 0
+	#timeT = 0
 
 	try:
 		while True:
 
 			(stat, tag_type) = rdr.request(rdr.REQIDL)
 			#While im aware this is not good practice im still going to go ahead and do it cause im to lazy to implement it better
-			if timeT >= 10000:
+			'''if timeT >= 10000:
 				do_sync()
 				timeT=0
 			else:
-				timeT+=1
+				timeT+=1'''
 
 			if stat == rdr.OK:
 
@@ -49,8 +49,9 @@ def do_read():
 							for decimal in rdr.read(8):
 								nameusn.append(str(chr(decimal)))
 							print(("".join(nameusn)).replace('\n',''))
-							response = urequests.get(f"https://webhook.site/aa19f85a-4e8f-4be7-bbea-04a4b4b66bed?tag={nameusn}")
-							print(response.code)
+							nameUSN=("".join(nameusn)).replace('\n','') 
+							response = urequests.get(f"https://webhook.site/aa19f85a-4e8f-4be7-bbea-04a4b4b66bed?tag={nameUSN}")
+							print(response)
 							rdr.stop_crypto1()
 						else:
 							print("Authentication error")
@@ -61,5 +62,5 @@ def do_read():
 		print("Bye")
 
 
-
+connect.do_connect()
 do_read()
