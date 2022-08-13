@@ -1,6 +1,7 @@
 import flask
 from datetime import datetime
 import json
+import register
 app=flask.Flask('app')
 
 timeThreshold = 60
@@ -75,6 +76,13 @@ def main():
     usn=nameusn.split(';')[1]
     updateEntry(usn)
 
+    return "Done"
+
+@app.route('/register')
+def registerEndpoint():
+    nameusnuid=flask.request.args.get('data')
+    nameusnuidarray=nameusnuid.split(';')
+    register.register(nameusnuidarray[0],nameusnuidarray[1],nameusnuidarray[2])
     return "Done"
 
 app.run(host='0.0.0.0', port=8080)
