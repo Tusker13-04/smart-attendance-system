@@ -3,7 +3,8 @@ import network
 import urequests
 from os import uname
 import connect
-
+import dht
+from machine import Pin
 
 def do_read():
 	connect.do_sync()
@@ -18,7 +19,8 @@ def do_read():
 	print("Place card before reader to read from address 0x08")
 	print("")
 	#timeT = 0
-
+	#https://i0.wp.com/randomnerdtutorials.com/wp-content/uploads/2019/04/dht_esp8266_bb.png?w=572&quality=100&strip=all&ssl=1 for pin config
+	sensor=dht.DHT11(Pin(14	))
 	try:
 		while True:
 
@@ -49,9 +51,14 @@ def do_read():
 							for decimal in rdr.read(8):
 								nameusn.append(str(chr(decimal)))
 							print(("".join(nameusn)).replace('\n',''))
-							nameUSN=("".join(nameusn)).replace('\n','') 
-							response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co?data={nameUSN}")
-							print(response)
+							nameUSN=("".join(nameusn)).replace('\n','')
+							sensor.measure()
+							temp=sensor.temperature()
+							if int(temp)<=29:
+								response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co?data={nameUSN}")
+								print(response)
+							else:
+								print("Fever detected")
 							rdr.stop_crypto1()
 						else:
 							print("Authentication error")
