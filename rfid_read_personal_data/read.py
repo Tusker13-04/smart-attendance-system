@@ -7,13 +7,10 @@ import dht
 from machine import Pin
 
 def do_read():
-	connect.do_sync()
-	if uname()[0] == 'WiPy':
-		rdr = main.MFRC522("GP14", "GP16", "GP15", "GP22", "GP17")
-	elif uname()[0] == 'esp8266':
-		rdr = main.MFRC522(0, 2, 4, 5, 14)
-	else:
-		raise RuntimeError("Unsupported platform")
+connect.do_sync()
+
+rdr = main.MFRC522(0, 2, 4, 5, 14)
+
 
 	print("")
 	print("Place card before reader to read from address 0x08")
