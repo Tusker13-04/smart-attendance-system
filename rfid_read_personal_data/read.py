@@ -7,9 +7,9 @@ import dht
 from machine import Pin
 
 def do_read():
-connect.do_sync()
+	connect.do_sync()
 
-rdr = main.MFRC522(0, 2, 4, 5, 14)
+	rdr = main.MFRC522(0, 2, 4, 5, 14)
 
 
 	print("")

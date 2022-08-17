@@ -27,8 +27,8 @@ class MFRC522:
 		board = uname()[0]
 
 
-self.spi = SPI(baudrate=100000, polarity=0, phase=0, sck=self.sck, mosi=self.mosi, miso=self.miso)
-self.spi.init()
+		self.spi = SPI(baudrate=100000, polarity=0, phase=0, sck=self.sck, mosi=self.mosi, miso=self.miso)
+		self.spi.init()
 
 
 		self.rst.value(1)

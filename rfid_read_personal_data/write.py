@@ -6,7 +6,7 @@ def do_write():
 
 
 
-rdr = main.MFRC522(0, 2, 4, 5, 14)
+	rdr = main.MFRC522(0, 2, 4, 5, 14)
 
 	print("")
 	print("Place card before reader to write address 0x08")
