@@ -17,7 +17,7 @@ def do_read():
 	print("")
 	#timeT = 0
 	#https://i0.wp.com/randomnerdtutorials.com/wp-content/uploads/2019/04/dht_esp8266_bb.png?w=572&quality=100&strip=all&ssl=1 for pin config
-	sensor=dht.DHT11(Pin(14	))
+	sensor=dht.DHT11(Pin(13	))
 	try:
 		while True:
 
