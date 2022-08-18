@@ -43,7 +43,8 @@ def do_write():
 						if rdr.auth(rdr.AUTHENT1A, 8, key, raw_uid) == rdr.OK:
 							stat = rdr.write(8, bytes(nameusn,'utf-8'))
 							nameUSN=nameusn+';'+str(raw_uid[0])+' ' +str(raw_uid[1])+' ' + str(raw_uid[2]) + ' ' + str(raw_uid[3])
-							response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co?data={nameUSN}")
+							payload={'data':nameUSN}
+							response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co",params=payload)
 							rdr.stop_crypto1()
 							if stat == rdr.OK:
 								print("Data written to card")
