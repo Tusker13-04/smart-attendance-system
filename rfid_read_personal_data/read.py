@@ -51,11 +51,9 @@ def do_read():
 							nameUSN=("".join(nameusn)).replace('\n','')
 							#sensor.measure()
 							#temp=sensor.temperature()
-							if int(temp)<=29:
-								response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co?data={nameUSN}")
-								print(response)
-							else:
-								print("Fever detected")
+							payload={'data':nameUSN}
+							response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co",params=payload)
+							print(response)
 							rdr.stop_crypto1()
 						else:
 							print("Authentication error")
