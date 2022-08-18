@@ -17,7 +17,7 @@ def do_read():
 	print("")
 	#timeT = 0
 	#https://i0.wp.com/randomnerdtutorials.com/wp-content/uploads/2019/04/dht_esp8266_bb.png?w=572&quality=100&strip=all&ssl=1 for pin config
-	sensor=dht.DHT11(Pin(13	))
+	#sensor=dht.DHT11(Pin(13	))
 	try:
 		while True:
 
@@ -49,8 +49,8 @@ def do_read():
 								nameusn.append(str(chr(decimal)))
 							print(("".join(nameusn)).replace('\n',''))
 							nameUSN=("".join(nameusn)).replace('\n','')
-							sensor.measure()
-							temp=sensor.temperature()
+							#sensor.measure()
+							#temp=sensor.temperature()
 							if int(temp)<=29:
 								response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co?data={nameUSN}")
 								print(response)
