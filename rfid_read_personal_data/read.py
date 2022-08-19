@@ -4,6 +4,7 @@ import urequests
 from os import uname
 import connect
 import dht
+import ujson
 from machine import Pin
 
 def do_read():
@@ -51,8 +52,8 @@ def do_read():
 							nameUSN=("".join(nameusn)).replace('\n','')
 							#sensor.measure()
 							#temp=sensor.temperature()
-							payload={'data':nameUSN}
-							response = urequests.get(f"https://SmartAttendanceSystem-Server.prateekm2.repl.co",params=payload)
+							payload=ujson.dumps({'usn':nameUSN.split(';')[1]})
+							response = urequests.post("https://SmartAttendanceSystem-Server.prateekm2.repl.co",headers={'content-type':'application/json'},data=payload)
 							print(response)
 							rdr.stop_crypto1()
 						else:

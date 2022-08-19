@@ -69,20 +69,24 @@ def updateEntry(usn):
         data = json.dumps(data)
         fil1.write(data)
 
-@app.route('/')
+@app.route('/' , methods=['GET','POST'])
 def main():
-    nameusn = flask.request.args.get('data')
-    name=nameusn.split(';')[0]
-    usn=nameusn.split(';')[1]
-    updateEntry(usn)
+    if flask.request.method == 'POST':
+        usn = flask.request.json['usn']
+        updateEntry(usn)
 
-    return "Done"
+        return "Done"
+    if flask.request.method=='GET':
+        return 'GET'
 
-@app.route('/register')
+@app.route('/register' , methods=['GET','POST'])
 def registerEndpoint():
-    nameusnuid=flask.request.args.get('data')
-    nameusnuidarray=nameusnuid.split(';')
-    register.register(nameusnuidarray[0],nameusnuidarray[1],nameusnuidarray[2])
-    return "Done"
+    if flask.request.method=='GET':
+        return 'GEt'
+    if flask.request.method=='POST':
+        nameusnuid=flask.request.json['data']
+        nameusnuidarray=nameusnuid.split(';')
+        register.register(nameusnuidarray[0],nameusnuidarray[1],nameusnuidarray[2])
+        return "Done"
 
 app.run(host='0.0.0.0', port=8080)
