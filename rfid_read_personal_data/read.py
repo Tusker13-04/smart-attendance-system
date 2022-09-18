@@ -53,7 +53,7 @@ def do_read():
 							#sensor.measure()
 							#temp=sensor.temperature()
 							payload=ujson.dumps({'usn':nameUSN.split(';')[1]})
-							response = urequests.post("https://SmartAttendanceSystem-Server.prateekm2.repl.co",headers={'content-type':'application/json'},data=payload)
+							response = urequests.post("https://SmartAttendanceCloud.innovationpsbb.repl.co",headers={'content-type':'application/json'},data=payload)
 							print(response)
 							rdr.stop_crypto1()
 						else:
